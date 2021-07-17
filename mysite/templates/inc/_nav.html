@@ -2,10 +2,14 @@
     <div class="container-fluid">
       <a class="navbar-brand" style="font-size: 2rem" href="{% url 'home' %}">
         <img src="https://www.kodms.ru/files/ckeditor/2020/11/29/sm.png" alt="" width="60" height="60" class="d-inline-block align-text-center">
-        Форум молодых мам
+        Форум молодых мам {% if subtitle %}| {{ subtitle }} {% endif %}
       </a>
       <span class="navbar-text">
-        <a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a>
+        {% if request.user.is_authenticated %}
+          Добро пожаловать, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %} | <a href="{% url 'logout' %}">Выйти из аккаунта</a>
+        {% else %}
+          <a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a>
+        {% endif %}
       </span>
     </div>
   </nav>

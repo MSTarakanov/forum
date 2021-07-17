@@ -2,9 +2,13 @@
 
 
 {% block content %}
+
+{% include 'inc/_nav.html' %}
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Регистрация</button>
 </form>
+
 {% endblock %}
