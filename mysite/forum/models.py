@@ -29,6 +29,9 @@ class Messages(models.Model):
     created_at = models.DateTimeField(verbose_name='Дата отправки', auto_now_add=True)
     user = models.ForeignKey(Users, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return str(self.pk)
+
     class Meta:
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
