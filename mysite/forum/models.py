@@ -46,7 +46,7 @@ class SiteUser(AbstractBaseUser, PermissionsMixin):
     fathers_name = models.CharField(verbose_name='Отчество', max_length=150, blank=True)
     start_date = models.DateTimeField(verbose_name='Дата регистрации', default=timezone.now)
     is_staff = models.BooleanField(verbose_name='Модератор', default=False)
-    is_active = models.BooleanField(verbose_name='Активный пользователь', default=False)
+    is_active = models.BooleanField(verbose_name='Активный пользователь', default=True)
     sex = models.ForeignKey('Sex', on_delete=models.PROTECT, null=True)
     photo = models.ImageField(verbose_name='Фото', upload_to='photos/%Y/%m/%d/', null=True)
     birth_date = models.DateTimeField(verbose_name='Дата рождения', null=True)

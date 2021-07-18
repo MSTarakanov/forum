@@ -4,7 +4,7 @@ from .forms import UserLoginForm, MessageAddForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
-
+# from .forms import SignUpForm
 
 def index(request):
     if request.method == 'POST':
