@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Messages
-from .forms import UserLoginForm, MessageAddForm
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserLoginForm, MessageAddForm, UserRegistrationForm
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
-# from .forms import SignUpForm
+
 
 def index(request):
     if request.method == 'POST':
@@ -22,7 +22,7 @@ def index(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Вы успешно зарегистрированы!')
@@ -30,7 +30,7 @@ def register(request):
         else:
             messages.error(request, 'Ошибка регистрации')
     else:
-        form = UserCreationForm()
+        form = UserRegistrationForm()
     return render(request, 'forum/register.html', {'form': form, 'subtitle': 'Регистрация'})
 
 

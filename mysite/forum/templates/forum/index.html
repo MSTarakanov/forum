@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-
-
+{% load static %}
+{% block navbar %}
+  {% include 'inc/_nav.html' %}
+{% endblock %}
 
 {% block content %}
-
-{% include 'inc/_nav.html' %}
-
 {% if request.user.is_authenticated %}
 <form action="{% url 'home' %}" method="POST">
   {% csrf_token %}
@@ -21,9 +20,13 @@
     </div>
   </div>
 </form>
+{% else %}
+<div class="alert alert-secondary text-center" role="alert">
+  Чтобы оставлять сообщения на форуме необходимо быть авторизованным
+</div>
 {% endif %}
 
-<div class="messagesBody">
+<div class="flex-box">
 {% for message in forum_messages %}
 <div class="card">
   <div class="row g-0">
@@ -31,20 +34,29 @@
       {% if message.user.photo %}
         <img src="{{ message.user.photo.url }}"  alt="..." class="img-thumbnail">
       {% else %}
-        <img src="https://stockinvest.us/storage/user_avatars/125139.jpg"  alt="..." class="img-thumbnail">
+        {% if message.user.sex_id == 1 %}
+          <img src="{% static 'img/m.png' %}"  alt="..." class="img-thumbnail">
+        {% else %}
+          <img src="https://stockinvest.us/storage/user_avatars/125139.jpg"  alt="..." class="img-thumbnail">
+        {% endif %}
       {% endif %}
     </div>
     <div class="col-md-11">
       <div class="card-body">
-        <h5 class="card-title">{{ message.user }}</h5>
+        <div class="row">
+          <h5 class="card-title col-auto">{{ message.user }} </h5>
+          <p class="card-title col fw-lighter"> {% if message.user.first_name %}{{ message.user.first_name }}{% endif %}{% if message.user.birth_date %}{% if message.user.first_name and message.user.birth_date %}, {% endif %}{{ message.user.get_age }}{% endif %}</p>
+        </div>
         <p class="card-text">{{ message.text }}</p>
-        <p class="card-text"><small class="text-muted">{{ message.created_at|date:"d b Y  H:i " }}</small></p>
+        <p class="card-text"><small class="text-muted">{{ message.get_created_date }}</small></p>
       </div>
     </div>
   </div>
 </div>
 {% empty %}
-Сообщений нет....(
+<div class="alert alert-info" role="alert">
+  Сообщений на этом форуме еще нет, вы можете стать первым!
+</div>
 {% endfor %}
 </div>
 {% endblock %}

@@ -1,4 +1,20 @@
-  <nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-expand-md  fixed-top navbar-light bg-light">
+      <div class="container-fluid">
+      <a class="navbar-brand" style="font-size: 2rem" href="{% url 'home' %}">
+        <img src="https://www.kodms.ru/files/ckeditor/2020/11/29/sm.png" alt="" width="60" height="60" class="d-inline-block align-text-center">
+        Форум молодых мам {% if subtitle %}| {{ subtitle }} {% endif %}
+      </a>
+      <span class="navbar-text">
+        {% if request.user.is_authenticated %}
+          Добро пожаловать, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %} {% if user.is_staff %} <a href="admin">Админка</a> {% endif %}| <a href="{% url 'logout' %}">Выйти из аккаунта</a>
+        {% else %}
+          <a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a>
+        {% endif %}
+      </span>
+    </div>
+    </nav>
+{% comment %}
+<nav class="navbar navbar-light bg-light navbar-fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" style="font-size: 2rem" href="{% url 'home' %}">
         <img src="https://www.kodms.ru/files/ckeditor/2020/11/29/sm.png" alt="" width="60" height="60" class="d-inline-block align-text-center">
@@ -13,3 +29,5 @@
       </span>
     </div>
   </nav>
+
+{% endcomment %}

@@ -19,4 +19,5 @@ class SiteUserAdmin(admin.ModelAdmin):
         ('Personal', {'fields': ('first_name', 'second_name', 'fathers_name', 'sex', 'birth_date', 'about')})
     )
 
+
 admin.site.register(SiteUser, SiteUserAdmin)

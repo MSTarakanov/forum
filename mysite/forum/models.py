@@ -1,17 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-
-# class Users(AbstractUser):
-#     sex = models.ForeignKey('Sex', on_delete=models.PROTECT, null=True)
-#     photo = models.ImageField(verbose_name='Фото', upload_to='photos/%Y/%m/%d/', null=True)
-#     bio = models.CharField(verbose_name='Био', max_length=100, blank=True)
-#
-#     class Meta:
-#         verbose_name = 'Пользователь'
-#         verbose_name_plural = 'Пользователи'
+from django.utils.timesince import timesince
 
 
 class SiteAccountManager(BaseUserManager):
@@ -47,9 +38,9 @@ class SiteUser(AbstractBaseUser, PermissionsMixin):
     start_date = models.DateTimeField(verbose_name='Дата регистрации', default=timezone.now)
     is_staff = models.BooleanField(verbose_name='Модератор', default=False)
     is_active = models.BooleanField(verbose_name='Активный пользователь', default=True)
-    sex = models.ForeignKey('Sex', on_delete=models.PROTECT, null=True)
-    photo = models.ImageField(verbose_name='Фото', upload_to='photos/%Y/%m/%d/', null=True)
-    birth_date = models.DateTimeField(verbose_name='Дата рождения', null=True)
+    sex = models.ForeignKey('Sex', on_delete=models.PROTECT, blank=True, null=True)
+    photo = models.ImageField(verbose_name='Фото', upload_to='photos/%Y/%m/%d/', blank=True, null=True)
+    birth_date = models.DateTimeField(verbose_name='Дата рождения', blank=True, null=True)
     about = models.TextField(verbose_name='Био', max_length=500, blank=True)
 
     objects = SiteAccountManager()
@@ -59,6 +50,14 @@ class SiteUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def get_age(self):
+        if self.birth_date:
+            age = ' '.join(timesince(self.birth_date).split()[0:2])
+            if age[-1] == ',':
+                age = age[:-1]
+            return age
+        return False
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -78,17 +77,24 @@ class Sex(models.Model):
 
 
 class Messages(models.Model):
-    text = models.TextField(verbose_name='Текст', max_length=150)
+    text = models.TextField(verbose_name='Текст', max_length=500)
     created_at = models.DateTimeField(verbose_name='Дата отправки', auto_now_add=True)
     user = models.ForeignKey(SiteUser, on_delete=models.PROTECT)
 
     def __str__(self):
         return str(self.pk)
 
+    def get_created_date(self):
+        return self.created_at
+        # today = timezone.now().date()
+        # if today == self.created_at.date():
+        #     return 'Сегодня ' + self.created_at.strftime('%H:%M')
+        # yesterday_delta = (timezone.now() - self.created_at).total_seconds()
+        # if 86400 < yesterday_delta < 86400*2:
+        #     return 'Вчера ' + self.created_at.strftime('%H:%M')
+        # return today
+
     class Meta:
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
         ordering = ['-created_at']
-
-
-

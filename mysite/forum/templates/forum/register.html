@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
 
+{% block navbar %}
+  {% include 'inc/_nav.html' %}
+{% endblock %}
 
 {% block content %}
 
-{% include 'inc/_nav.html' %}
+<div class="container">
+    <div class="row">
+        <div class="mx-auto my-2" style="width: 40%;">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <button type="submit" class="btn btn-primary">Регистрация</button>
+                </div>
+            </form>
+        </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Регистрация</button>
-</form>
+    </div>
+</div>
+
 
 {% endblock %}
